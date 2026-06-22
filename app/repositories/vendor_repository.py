@@ -3,7 +3,7 @@ from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.repositories.base import BaseRepository
 # Assuming models are structured under app/models/
-from app.models.vendor import Vendor 
+from app.models.invoice import Vendor 
 
 class VendorRepository(BaseRepository[Vendor]):
     def __init__(self, db_session: AsyncSession):

@@ -2,20 +2,20 @@ from typing import Optional, List
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.repositories.base import BaseRepository
-from app.models.invoice import Invoice
+from app.models.invoice import Invoice, InvoiceFile
 
 class InvoiceRepository(BaseRepository[Invoice]):
     def __init__(self, db_session: AsyncSession):
         super().__init__(Invoice, db_session)
 
-    async def get_by_idempotency_hash(self, file_hash: str) -> Optional[Invoice]:
+    async def get_by_idempotency_hash(self, file_hash: str) -> Optional[InvoiceFile]:
         """
         Strict determinism rule: check if an invoice file has already been uploaded 
         and hashed to avoid duplicate ingestion processing pipelines.
         """
-        # Relies on an index over file_hash field for high performance
+        # Relies on an index over idempotency_key field for high performance
         result = await self.db.execute(
-            select(self.model).filter(self.model.file_hash == file_hash)
+            select(InvoiceFile).filter(InvoiceFile.idempotency_key == file_hash)
         )
         return result.scalars().first()
 

@@ -1,0 +1,18 @@
+# Web Framework & Server
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+python-multipart==0.0.9
+
+# Persistence & Database Drivers
+sqlalchemy==2.0.31
+asyncpg==0.29.0
+alembic==1.13.1
+
+# Task Queue (For upcoming Celery integration)
+celery==5.4.0
+redis==5.0.7
+
+# Testing Stack
+pytest==8.2.2
+pytest-asyncio==0.23.7
+httpx==0.27.0
