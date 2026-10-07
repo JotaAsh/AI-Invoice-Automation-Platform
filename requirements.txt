@@ -15,4 +15,5 @@ redis==5.0.7
 # Testing Stack
 pytest==8.2.2
 pytest-asyncio==0.23.7
-httpx==0.27.0
+httpx==0.27.0pydantic-settings==2.3.4
+requests==2.32.3

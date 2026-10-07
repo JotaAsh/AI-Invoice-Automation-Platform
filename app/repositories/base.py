@@ -1,25 +1,28 @@
-from typing import Generic, TypeVar, Type, List, Optional, Any
+from typing import Generic, TypeVar
 from uuid import UUID
-from sqlalchemy.future import select
+
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 
 ModelType = TypeVar("ModelType")
 
+
 class BaseRepository(Generic[ModelType]):
     """
-    Abstract/Generic base repository providing standard CRUD operations 
+    Abstract/Generic base repository providing standard CRUD operations
     leveraging SQLAlchemy AsyncSession.
     """
-    def __init__(self, model: Type[ModelType], db_session: AsyncSession):
+
+    def __init__(self, model: type[ModelType], db_session: AsyncSession):
         self.model = model
         self.db = db_session
 
-    async def get(self, id: UUID) -> Optional[ModelType]:
+    async def get(self, id: UUID) -> ModelType | None:
         """Retrieve a specific record by its primary UUID key."""
         result = await self.db.execute(select(self.model).filter(self.model.id == id))
         return result.scalars().first()
 
-    async def get_multi(self, skip: int = 0, limit: int = 100) -> List[ModelType]:
+    async def get_multi(self, skip: int = 0, limit: int = 100) -> list[ModelType]:
         """Retrieve a paginated list of records."""
         query = select(self.model).offset(skip).limit(limit)
         result = await self.db.execute(query)

@@ -1,12 +1,15 @@
 import os
-from typing import AsyncGenerator
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from collections.abc import AsyncGenerator
+
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 # In production, these should be loaded via pydantic-settings from an .env file
 POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "SecurePass2026")
 POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")
-POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")  # Using the external mapped port specified
+POSTGRES_PORT = os.getenv(
+    "POSTGRES_PORT", "5432"
+)  # Using the external mapped port specified
 POSTGRES_DB = os.getenv("POSTGRES_DB", "ap_automation_db")
 
 # Constructing asynchronous connection URI (using asyncpg)
@@ -28,8 +31,9 @@ async_session_factory = async_sessionmaker(
     class_=AsyncSession,
     expire_on_commit=False,
     autocommit=False,
-    autoflush=False
+    autoflush=False,
 )
+
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """
